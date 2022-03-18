@@ -60,8 +60,8 @@ lazy val assemblySettings = Seq(
 
 sonatypeProfileName := "com.twosixlabs"
 inThisBuild( List(
-    organization := "com.twosixlabs.dart.corpex",
-    homepage := Some( url( "https://github.com/twosixlabs-dart/corpex" ) ),
+    organization := "com.twosixlabs.dart",
+    homepage := Some( url( "https://github.com/twosixlabs-dart/readers-output" ) ),
     licenses := List( "GNU-Affero-3.0" -> url( "https://www.gnu.org/licenses/agpl-3.0.en.html" ) ),
     developers := List(
         Developer(
