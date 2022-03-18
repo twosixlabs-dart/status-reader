@@ -13,34 +13,11 @@ import java.io.InputStream
 import java.nio.file.{Files, Path, Paths}
 import scala.util.Try
 
-object Main extends App {
+object Main {
 
     private val LOG : Logger = LoggerFactory.getLogger( getClass )
 
-    override def main( args : Array[ String ] ) : Unit = {
-
-        val logbackLevel : String = DartConfigDI.config.getString( "log.level" ).toLowerCase
-        val logbackFilePath : Path = Paths get {
-            val rawPath = DartConfigDI.config.getString( "log.filepath" ).trim
-            if ( rawPath.startsWith("~") ) rawPath.replace( "~", System.getProperty( "user.home" ).stripSuffix( "/" ) )
-            else rawPath
-        }
-        val logbackResourceName = "logback/" + logbackLevel + ".xml"
-        val logbackResourceStream : InputStream = Resource.getAsStream( logbackResourceName )
-        Try( Files.delete( logbackFilePath ) )
-        Files.copy( logbackResourceStream, logbackFilePath )
-        logbackResourceStream.close()
-
-        val loggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[ LoggerContext ]
-        Try {
-            val configurator = new JoranConfigurator
-            configurator.setContext( loggerContext )
-            // Call context.reset() to clear any previous configuration, e.g. default
-            // configuration. For multi-step configuration, omit calling context.reset().
-            loggerContext.reset()
-            configurator.doConfigure( logbackFilePath.toString )
-        } logged
-
+    def main( args : Array[ String ] ) : Unit = {
         val port = DartConfigDI.config.getInt( "status.http.port" )
         val server = new Server( port )
         val context = new WebAppContext()
@@ -53,6 +30,5 @@ object Main extends App {
         server.setHandler( context )
         server.start()
         server.join()
-
     }
 }
